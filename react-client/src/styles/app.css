@@ -1,0 +1,9 @@
+.headlineWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.headline {
+  color: green;
+}

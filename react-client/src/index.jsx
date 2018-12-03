@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Axios from 'axios';
 import Landing from './components/Landing.jsx';
 import Lobby from './components/Lobby.jsx'
+import styles from './styles/app.css';
 
 class App extends React.Component {
   constructor(props) {
@@ -38,8 +39,14 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="main">
-        {this.renderView()}
+      <div>
+        <div className={styles.headlineWrapper}>
+          <h1 className={styles.headline}>Memein</h1>
+        </div>
+
+        <div className="main">
+          {this.renderView()}
+        </div>
       </div>
     )
   }
