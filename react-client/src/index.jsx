@@ -14,7 +14,8 @@ class App extends React.Component {
       view: 'lobby',
       players: [],
       playerCount: 0,
-      roomCount: 0
+      roomCount: 0,
+      countdown: null
     }
     this.changeView = this.changeView.bind(this);
 
@@ -28,8 +29,8 @@ class App extends React.Component {
       }
     });
 
-    socket.on('countdown', function (data) {
-      console.log(data);
+    socket.on('countdown', function (countdown) {
+      context.setState({ countdown })
     })
   }
 
@@ -51,7 +52,9 @@ class App extends React.Component {
     } else if (view === 'lobby') {
       return <Lobby changeView={this.changeView}
         players={this.state.playerCount}
-        roomCount={this.state.roomCount} />
+        roomCount={this.state.roomCount}
+        countdown={this.state.countdown}
+      />
     } else {
       return <div></div>
     }
