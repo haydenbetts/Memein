@@ -15,9 +15,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/../react-client/dist'));
 
 let playerCount = 0;
-let roomCount = 0;
 
 io.on('connection', function (socket) {
+  let roomNumber;
   playerCount++;
 
   io.emit('counts', playerCount);
@@ -27,8 +27,13 @@ io.on('connection', function (socket) {
     io.sockets.emit('counts', playerCount);
   });
 
-  socket.on('room', function (room) {
-    console.log(room);
+  socket.on('joinRoom', function (room) {
+    roomNumber = room;
     socket.join(room);
+    let socketRoomObject = io.sockets.adapter.rooms[room];
+    if (socketRoomObject && socketRoomObject.length === 4) {
+      console.log('room full')
+      io.sockets.in(room).emit('countdown', 'starting countdown');
+    }
   })
 });

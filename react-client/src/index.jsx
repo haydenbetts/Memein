@@ -19,10 +19,18 @@ class App extends React.Component {
     this.changeView = this.changeView.bind(this);
 
     let context = this;
+
     socket.on('counts', function (playerCount) {
       context.setState({ playerCount: playerCount }, () => {
       })
+      if (playerCount === 4) {
+        socket.emit('joinRoom', context.state.roomCount);
+      }
     });
+
+    socket.on('countdown', function (data) {
+      console.log(data);
+    })
   }
 
   componentDidMount() {
