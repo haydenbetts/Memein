@@ -9,7 +9,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      view: 'landing'
+      view: 'landing',
+      players: []
     }
     this.changeView = this.changeView.bind(this);
   }
@@ -31,7 +32,7 @@ class App extends React.Component {
     if (view === 'landing') {
       return <Landing changeView={this.changeView} />
     } else if (view === 'lobby') {
-      return <Lobby changeView={this.changeView} />
+      return <Lobby changeView={this.changeView} players={this.state.players} />
     } else {
       return <div></div>
     }
