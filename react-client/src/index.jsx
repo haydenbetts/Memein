@@ -4,19 +4,28 @@ import Axios from 'axios';
 import Landing from './components/Landing.jsx';
 import Lobby from './components/Lobby.jsx'
 import styles from './styles/app.css';
+import openSocket from 'socket.io-client';
+const socket = openSocket('http://localhost:3000');
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      view: 'landing',
-      players: []
+      view: 'lobby',
+      players: [],
+      playerCount: 0,
+      roomCount: 0
     }
     this.changeView = this.changeView.bind(this);
+
+    let context = this;
+    socket.on('counts', function (playerCount) {
+      context.setState({ playerCount: playerCount }, () => {
+      })
+    });
   }
 
   componentDidMount() {
-
   }
 
 
@@ -32,7 +41,9 @@ class App extends React.Component {
     if (view === 'landing') {
       return <Landing changeView={this.changeView} />
     } else if (view === 'lobby') {
-      return <Lobby changeView={this.changeView} players={this.state.players} />
+      return <Lobby changeView={this.changeView}
+        players={this.state.playerCount}
+        roomCount={this.state.roomCount} />
     } else {
       return <div></div>
     }
