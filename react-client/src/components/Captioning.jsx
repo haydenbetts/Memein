@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from '../styles/captioning.css'
 import axios from 'axios';
+import LazyLoad from 'react-lazyload';
 
 class Captioning extends React.Component {
   constructor(props) {
@@ -61,21 +62,20 @@ class Captioning extends React.Component {
   render() {
     return (
       <div>
-        <div className={styles.imageWrapper}>
-          {this.state.sampleImageUrls.map((url) => {
-            return <img src={url} height="300"></img>
-          })}
-        </div>
         <div className={styles.textWrapper}>
-          <h2>Ready... set... caption....!</h2>
+          <h2>Ready... set... caption....! {this.props.countdownTwo} seconds left.</h2>
           <div className={styles.captionArea}>
             <textarea className={styles.topText} id="topLine" onChange={(e) => this.handleChange(e)}></textarea>
             <img src={this.state.blankImageUrl} width="300"></img>
             <textarea className={styles.bottomText} id="bottomLine" onChange={(e) => this.handleChange(e)}></textarea>
           </div>
-          <button id="submit" onClick={(e) => { this.clickHandler(e) }}>Submit</button>
-          There are {this.props.countdownTwo} seconds left.
-          </div>
+          {/* <button id="submit" onClick={(e) => { this.clickHandler(e) }}>Submit</button> */}
+        </div>
+        <div className={styles.imageWrapper}>
+          {this.state.sampleImageUrls.map((url) => {
+            return <LazyLoad width={290}><img src={url} width="290"></img></LazyLoad>
+          })}
+        </div>
       </div>
     )
   }
