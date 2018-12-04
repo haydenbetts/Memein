@@ -39,14 +39,13 @@ io.on('connection', function (socket) {
     if (socketRoomObject && socketRoomObject.length === 4) {
       // if the room is full, start a countdown
       console.log('room full')
-      io.sockets.in(room).emit('countdown', 'starting countdown');
+      io.sockets.in(room).emit('countdown', 5);
 
       let counter = 5;
       let WinnerCountdown = setInterval(function () {
+        counter--;
         io.sockets.in(room).emit('countdown', counter);
-        counter--
         if (counter === 0) {
-          io.sockets.in(room).emit('countdown', counter);
           // TODO get three random images of the same meme,
           // and set them in the object below to our clients
           io.sockets.in(room).emit('meme', {});
@@ -62,13 +61,13 @@ io.on('connection', function (socket) {
         console.log(data)
 
         startedGameForRoom[data.room] = true;
-        io.sockets.in(data.room).emit('countdownTwo', 'starting countdown');
-        let counter = 6;
+        io.sockets.in(data.room).emit('countdownTwo', 5);
+        let counter = 5;
         let WinnerCountdown = setInterval(function () {
           counter--
           io.sockets.in(data.room).emit('countdownTwo', counter);
           if (counter === 0) {
-            io.sockets.in(data.room).emit('gameOver');
+            io.sockets.in(data.room).emit('captioningOver');
             clearInterval(WinnerCountdown);
           }
         }, 1000);

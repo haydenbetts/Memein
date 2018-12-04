@@ -1,8 +1,8 @@
 import React from 'react';
-import styles from '../styles/game.css'
+import styles from '../styles/captioning.css'
 import axios from 'axios';
 
-class Game extends React.Component {
+class Captioning extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -68,4 +68,4 @@ class Game extends React.Component {
   }
 }
 
-export default Game;
+export default Captioning;

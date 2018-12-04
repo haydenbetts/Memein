@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Axios from 'axios';
 import Landing from './components/Landing.jsx';
 import Lobby from './components/Lobby.jsx';
-import Game from './components/Game.jsx';
+import Captioning from './components/Captioning.jsx';
 import styles from './styles/app.css';
 import openSocket from 'socket.io-client';
 const socket = openSocket('http://localhost:3000');
@@ -12,7 +12,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      view: 'landing',
+      view: 'lobby',
       players: [],
       playerCount: 0,
       roomCount: 0,
@@ -38,12 +38,17 @@ class App extends React.Component {
       context.setState({ countdownTwo: countdownTwo })
     })
 
-    socket.on('gameOver', function () {
+    socket.on('captioningOver', function () {
       context.setState({})
+      // on game over, submit your top line and bottom line to 
+      // the api
+      // when you have retrieved responses from the api, 
+      // send those memes to everyone in the room.
+      // and render 
     })
 
     socket.on('meme', function () {
-      context.setState({ view: 'game' })
+      context.setState({ view: 'captioning' })
       socket.emit('update', {
         room: context.state.roomCount,
         message: 'startgame'
@@ -72,8 +77,8 @@ class App extends React.Component {
         roomCount={this.state.roomCount}
         countdown={this.state.countdown}
       />
-    } else if (view === 'game') {
-      return <Game changeView={this.changeView}
+    } else if (view === 'captioning') {
+      return <Captioning changeView={this.changeView}
         socket={this.state.socket}
         countdownTwo={this.state.countdownTwo}
       />
