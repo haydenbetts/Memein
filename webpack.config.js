@@ -40,6 +40,7 @@ module.exports = {
       'process.env.API_KEY': JSON.stringify(process.env.API_KEY),
       'process.env.USERNAME': JSON.stringify(process.env.USERNAME),
       'process.env.PASSWORD': JSON.stringify(process.env.PASSWORD),
+      'process.env.HOSTNAME': JSON.stringify(process.env.HOSTNAME),
       "process.env.NODE_ENV": JSON.stringify("production")
     })
   ]
