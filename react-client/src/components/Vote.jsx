@@ -16,6 +16,12 @@ class Vote extends React.Component {
       let clicked = e.currentTarget;
       clicked.classList.add(styles.clickedMeme);
       this.setState({ alreadyVoted: true });
+
+      this.props.socket.emit('update', {
+        message: 'voted',
+        room: this.props.roomCount,
+        voteURL: clicked.src
+      })
     }
     //document.getElementById( 'ctl00_ContentPlaceHolder1_ctl00_ctl01_loderImg' ).src;
 

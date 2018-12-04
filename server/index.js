@@ -86,7 +86,37 @@ io.on('connection', function (socket) {
         io.sockets.in(data.room).emit('receivedAllMemes', {
           urls: startedGameForRoom[data.room]['memeURLS']
         });
+
+        // can comment this out
+        startedGameForRoom[data.room]['votes'] = {};
+        Object.values(startedGameForRoom[data.room]['memeURLS']).forEach((url) => {
+          startedGameForRoom[data.room]['votes'][url] = 0;
+        })
       }
+    } else if (data.message === 'voted') {
+      console.log(startedGameForRoom[data.room]['votes'])
+      //
+
+      startedGameForRoom[data.room]['votes'][data.voteURL] += 1;
+
+
+      /*
+      if (!startedGameForRoom[data.room]['votes']) {
+        startedGameForRoom[data.room]['votes'] = {};
+        startedGameForRoom[data.room]['votes'][data.voteURL] = 1;
+      } else {
+        if (startedGameForRoom[data.room]['votes'][data.voteURL]) {
+          startedGameForRoom[data.room]['votes'][data.voteURL] += 1;
+        } else {
+          startedGameForRoom[data.room]['votes'][data.voteURL] = 1;
+        }
+      }
+      */
+
+      // if total number of votes === 4, emit gameover
+      let totalVotes = Object.values(startedGameForRoom[data.room]['votes']).reduce((acc, elt) => acc + elt);
+      console.log('totalvotes', totalVotes)
+      if (totalVotes === 4) io.sockets.in(data.room).emit('gameOver', startedGameForRoom[data.room]['votes']);
     }
   })
 

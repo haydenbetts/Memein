@@ -6,6 +6,7 @@ import Lobby from './components/Lobby.jsx';
 import Captioning from './components/Captioning.jsx';
 import Splash from './components/Splash.jsx';
 import Vote from './components/Vote.jsx';
+import Scores from './components/Scores.jsx';
 import styles from './styles/app.css';
 import openSocket from 'socket.io-client';
 const socket = openSocket('http://localhost:3000');
@@ -20,7 +21,8 @@ class App extends React.Component {
       countdown: null,
       countdownTwo: null,
       generatedMemeURL: "",
-      generatedMemeURLS: null
+      generatedMemeURLS: null,
+      scores: null
     }
     this.changeView = this.changeView.bind(this);
 
@@ -62,6 +64,12 @@ class App extends React.Component {
       socket.emit('update', {
         room: context.state.roomCount,
         message: 'startgame'
+      })
+    })
+
+    socket.on('gameOver', function (scores) {
+      context.setState({ scores: scores }, () => {
+        context.setState({ view: 'scores' });
       })
     })
 
@@ -113,7 +121,9 @@ class App extends React.Component {
     } else if (view === 'splash') {
       return <Splash changeView={this.state.changeView} />
     } else if (view === 'vote') {
-      return <Vote generatedMemeURLS={this.state.generatedMemeURLS} />
+      return <Vote generatedMemeURLS={this.state.generatedMemeURLS} socket={socket} roomCount={this.state.roomCount} />
+    } else if (view === 'scores') {
+      return <Scores scores={this.state.scores} />
     } else {
       return <div></div>
     }

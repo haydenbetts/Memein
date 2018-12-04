@@ -1,0 +1,9 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+}
+.generatedMemes {
+  margin: 10px;
+}
