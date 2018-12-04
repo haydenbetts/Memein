@@ -5,6 +5,7 @@ import Landing from './components/Landing.jsx';
 import Lobby from './components/Lobby.jsx';
 import Captioning from './components/Captioning.jsx';
 import Splash from './components/Splash.jsx';
+import Vote from './components/Vote.jsx';
 import styles from './styles/app.css';
 import openSocket from 'socket.io-client';
 const socket = openSocket('http://localhost:3000');
@@ -18,7 +19,8 @@ class App extends React.Component {
       roomCount: 0,
       countdown: null,
       countdownTwo: null,
-      generatedMemeURL: ""
+      generatedMemeURL: "",
+      generatedMemeURLS: null
     }
     this.changeView = this.changeView.bind(this);
 
@@ -48,8 +50,11 @@ class App extends React.Component {
       // and render 
     })
 
-    socket.on('receivedAllMemes', function (data) {
-      console.log(data)
+    socket.on('receivedAllMemes', function ({ urls }) {
+      context.setState({ generatedMemeURLS: urls }, () => {
+        console.log('STATETTETE', context.state.generatedMemeURLS)
+        context.changeView('vote');
+      });
     })
 
     socket.on('meme', function () {
@@ -107,6 +112,8 @@ class App extends React.Component {
       />
     } else if (view === 'splash') {
       return <Splash changeView={this.state.changeView} />
+    } else if (view === 'vote') {
+      return <Vote generatedMemeURLS={this.state.generatedMemeURLS} />
     } else {
       return <div></div>
     }
