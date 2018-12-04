@@ -39,7 +39,7 @@ class Captioning extends React.Component {
     let buttonNode = document.querySelector('#submit');
     document.querySelector('#topLine').disabled = true;
     document.querySelector('#bottomLine').disabled = true;
-    buttonNode.style.display = 'none';
+    buttonNode.style.visibility = 'hidden';
   }
 
   fetchMeme() {
@@ -60,16 +60,22 @@ class Captioning extends React.Component {
   }
 
   render() {
+
+    let inputStyle = {
+      marginBottom: '15px'
+    }
+
     return (
       <div>
         <div className={styles.textWrapper}>
           <h2>Ready... set... caption....! {this.props.countdownTwo} seconds left.</h2>
+          <h3>(Don't know the format? See example memes to the right and left.)</h3>
+          <button id="submit" class={styles.submit} style={inputStyle} onClick={(e) => { this.clickHandler(e) }}>Submit</button>
           <div className={styles.captionArea}>
             <textarea className={styles.topText} id="topLine" onChange={(e) => this.handleChange(e)}></textarea>
             <img src={this.state.blankImageUrl} width="300"></img>
             <textarea className={styles.bottomText} id="bottomLine" onChange={(e) => this.handleChange(e)}></textarea>
           </div>
-          {/* <button id="submit" onClick={(e) => { this.clickHandler(e) }}>Submit</button> */}
         </div>
         <div className={styles.imageWrapper}>
           {this.state.sampleImageUrls.map((url) => {

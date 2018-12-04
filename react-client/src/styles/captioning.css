@@ -47,11 +47,14 @@ textarea.bottomText {
   text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
 }
 
+button.submit {
+  margin-bottom: 25px;
+}
 
 .captionArea {
   display: flex;
   position: absolute;
-  top: 150px;
+  top: 250px;
   right: 0px;
   justify-content: center;
   flex-direction: column;

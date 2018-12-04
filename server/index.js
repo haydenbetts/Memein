@@ -108,8 +108,8 @@ io.on('connection', function (socket) {
         console.log(data)
 
         startedGameForRoom[data.room]['timerTwo'] = true;
-        io.sockets.in(data.room).emit('countdownTwo', 30);
-        let counter = 30;
+        io.sockets.in(data.room).emit('countdownTwo', 100);
+        let counter = 100;
         let WinnerCountdown = setInterval(function () {
           counter--
           io.sockets.in(data.room).emit('countdownTwo', counter);
