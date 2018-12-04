@@ -42,8 +42,8 @@ class App extends React.Component {
     socket.on('lobbyCount', function (lobbyCount) {
       context.setState({ lobbyCount: lobbyCount }, () => {
       })
-      console.log(lobbyCount)
       if (lobbyCount === 4) {
+        console.log('should be starting game')
         socket.emit('joinRoom', context.state.roomCount);
       }
     });
@@ -135,7 +135,7 @@ class App extends React.Component {
     } else if (view === 'vote') {
       return <Vote generatedMemeURLS={this.state.generatedMemeURLS} socket={socket} roomCount={this.state.roomCount} />
     } else if (view === 'scores') {
-      return <Scores scores={this.state.scores} />
+      return <Scores scores={this.state.scores} socket={socket} changeView={this.changeView} />
     } else {
       return <div></div>
     }

@@ -58,13 +58,26 @@ io.on('connection', function (socket) {
     io.sockets.emit('lobbyCount', startedGameForRoom[roomNumber]['lobbyCount']);
   })
 
+  socket.on('leavingGame', function () {
+    if (startedGameForRoom[roomNumber]['lobbyCount'] > 0) {
+      startedGameForRoom[roomNumber]['lobbyCount'] -= 1;
+    }
+    delete startedGameForRoom[roomNumber]['votes'];
+    //startedGameForRoom[roomNumber]['lobbyCount'] = 0;
+    delete startedGameForRoom[roomNumber]['memeURLS'];
+    socket.leave(roomNumber);
+
+    io.sockets.emit('lobbyCount', startedGameForRoom[roomNumber]['lobbyCount']);
+  })
+
   socket.on('joinRoom', function (room) {
     roomNumber = room;
     socket.join(room);
     // startedGameForRoom[room] = {};
     socketRoomObject = io.sockets.adapter.rooms[room];
-
-    if (socketRoomObject && socketRoomObject.length === 4) {
+    // TODO for MVP, I am making roomObject length non-precise
+    // this may cause issues in the the future!
+    if (socketRoomObject && socketRoomObject.length >= 4) {
       // if the room is full, start a countdown
       console.log('room full')
       io.sockets.in(room).emit('countdown', 5);
@@ -78,6 +91,7 @@ io.on('connection', function (socket) {
           // and set them in the object below to our clients
           io.sockets.in(room).emit('meme', {});
           clearInterval(WinnerCountdown);
+          io.sockets.in(room).emit('countdown', null);
         }
       }, 1000);
     }
@@ -91,8 +105,8 @@ io.on('connection', function (socket) {
         console.log(data)
 
         startedGameForRoom[data.room]['timerTwo'] = true;
-        io.sockets.in(data.room).emit('countdownTwo', 5);
-        let counter = 5;
+        io.sockets.in(data.room).emit('countdownTwo', 2);
+        let counter = 2;
         let WinnerCountdown = setInterval(function () {
           counter--
           io.sockets.in(data.room).emit('countdownTwo', counter);
@@ -104,13 +118,13 @@ io.on('connection', function (socket) {
         }, 1000);
       }
     } else if (data.message === 'memeGenerated') {
-      console.log(data)
       if (!startedGameForRoom[data.room]['memeURLS']) {
         startedGameForRoom[data.room]['memeURLS'] = [data.url];
       } else {
         startedGameForRoom[data.room]['memeURLS'].push(data.url);
       }
-
+      console.log('roomNumberReceived', data.room)
+      console.log('memeURLS lenghth', startedGameForRoom[data.room]['memeURLS'])
       if (startedGameForRoom[data.room]['memeURLS'].length === 4) {
         io.sockets.in(data.room).emit('receivedAllMemes', {
           urls: startedGameForRoom[data.room]['memeURLS']
@@ -123,8 +137,6 @@ io.on('connection', function (socket) {
         })
       }
     } else if (data.message === 'voted') {
-      console.log(startedGameForRoom[data.room]['votes'])
-      //
 
       startedGameForRoom[data.room]['votes'][data.voteURL] += 1;
 
@@ -144,7 +156,6 @@ io.on('connection', function (socket) {
 
       // if total number of votes === 4, emit gameover
       let totalVotes = Object.values(startedGameForRoom[data.room]['votes']).reduce((acc, elt) => acc + elt);
-      console.log('totalvotes', totalVotes)
       if (totalVotes === 4) io.sockets.in(data.room).emit('gameOver', startedGameForRoom[data.room]['votes']);
     }
   })
