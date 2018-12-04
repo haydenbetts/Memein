@@ -7,9 +7,10 @@ class Captioning extends React.Component {
     super(props);
     this.state = {
       sampleImageUrls: [],
+      blankImageUrl: "",
       topLine: "test+top+line",
       bottomLine: "test+bottom+line",
-      memeIdForPost: ""
+      memeIdForPost: "",
     };
   }
 
@@ -41,9 +42,10 @@ class Captioning extends React.Component {
   }
 
   fetchMeme() {
-    const URL = `http://version1.api.memegenerator.net//Instances_Select_ByPopular?languageCode=en&pageIndex=0&urlName=The-Most-Interesting-Man-In-The-World&days=&apiKey=${process.env.API_KEY}`;
-    const POST_URL = `https://api.imgflip.com/caption_image?template_id=61532&password=${process.env.PASSWORD}&text0=hellohellohello&text1=hellohellohello&username=${process.env.USERNAME}`;
     this.setState({ memeIdForPost: 61532 });
+    const URL = `http://version1.api.memegenerator.net//Instances_Select_ByPopular?languageCode=en&pageIndex=0&urlName=The-Most-Interesting-Man-In-The-World&days=&apiKey=${process.env.API_KEY}`;
+    const BLANK_URL = `https://i.imgflip.com/1bh8.jpg`;
+    this.setState({ blankImageUrl: BLANK_URL })
     let instanceUrls = [];
     let context = this;
     axios.get(URL)
@@ -66,12 +68,13 @@ class Captioning extends React.Component {
         </div>
         <div className={styles.textWrapper}>
           <h2>Ready... set... caption....!</h2>
-          <h3> My Top-line</h3>
-          <textarea className={styles.memeText} id="topLine" onChange={(e) => this.handleChange(e)}></textarea>
-          <h3> My Bottom-line</h3>
-          <textarea className={styles.memeText} id="bottomLine" onChange={(e) => this.handleChange(e)}></textarea>
-          <button id="submit" onClick={(e) => { this.clickHandler(e) }}>Submit</button>
-          There are {this.props.countdownTwo} seconds left.
+          <div className={styles.captionArea}>
+            <textarea className={styles.memeText} id="topLine" onChange={(e) => this.handleChange(e)}></textarea>
+            <img src={this.state.blankImageUrl} width="300"></img>
+            <textarea className={styles.memeText} id="bottomLine" onChange={(e) => this.handleChange(e)}></textarea>
+            <button id="submit" onClick={(e) => { this.clickHandler(e) }}>Submit</button>
+            There are {this.props.countdownTwo} seconds left.
+          </div>
         </div>
       </div>
     )
