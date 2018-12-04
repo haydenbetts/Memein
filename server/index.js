@@ -36,12 +36,12 @@ io.on('connection', function (socket) {
       console.log('room full')
       io.sockets.in(room).emit('countdown', 'starting countdown');
 
-      var counter = 10;
+      var counter = 5;
       var WinnerCountdown = setInterval(function () {
         io.sockets.emit('countdown', counter);
         counter--
         if (counter === 0) {
-          io.sockets.emit('countdown', "Congratulations You WON!!");
+          io.sockets.emit('countdown', counter);
           clearInterval(WinnerCountdown);
         }
       }, 1000);

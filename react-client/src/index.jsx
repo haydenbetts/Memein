@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Axios from 'axios';
 import Landing from './components/Landing.jsx';
-import Lobby from './components/Lobby.jsx'
+import Lobby from './components/Lobby.jsx';
+import Game from './components/Game.jsx';
 import styles from './styles/app.css';
 import openSocket from 'socket.io-client';
 const socket = openSocket('http://localhost:3000');
@@ -20,7 +21,6 @@ class App extends React.Component {
     this.changeView = this.changeView.bind(this);
 
     let context = this;
-
     socket.on('counts', function (playerCount) {
       context.setState({ playerCount: playerCount }, () => {
       })
@@ -55,6 +55,8 @@ class App extends React.Component {
         roomCount={this.state.roomCount}
         countdown={this.state.countdown}
       />
+    } else if (view === 'game') {
+      return <Game changeView={this.changeView} />
     } else {
       return <div></div>
     }
