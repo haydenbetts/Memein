@@ -32,6 +32,10 @@ class App extends React.Component {
     socket.on('countdown', function (countdown) {
       context.setState({ countdown })
     })
+
+    socket.on('meme', function () {
+      context.setState({ view: 'game' })
+    })
   }
 
   componentDidMount() {

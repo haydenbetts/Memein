@@ -4,8 +4,8 @@ import styles from '../styles/game.css'
 class Game extends React.Component {
   constructor(props) {
     super(props);
+    // emit 4 joined game events
   }
-
 
   render() {
     return (

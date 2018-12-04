@@ -7,11 +7,10 @@ class Lobby extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.countdown === 0) {
-      this.props.changeView('game');
-    }
+    // if (this.props.countdown === 0) {
+    //   this.props.changeView('game');
+    // }
   }
-
 
   render() {
     return (

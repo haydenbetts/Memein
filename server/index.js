@@ -31,6 +31,7 @@ io.on('connection', function (socket) {
     roomNumber = room;
     socket.join(room);
     let socketRoomObject = io.sockets.adapter.rooms[room];
+
     if (socketRoomObject && socketRoomObject.length === 4) {
       // if the room is full, start a countdown
       console.log('room full')
@@ -42,10 +43,14 @@ io.on('connection', function (socket) {
         counter--
         if (counter === 0) {
           io.sockets.emit('countdown', counter);
+          io.sockets.in(room).emit('meme', {});
           clearInterval(WinnerCountdown);
         }
       }, 1000);
-
     }
+  })
+
+  socket.on('startedGame', function () {
+    // send something to everyone in room
   })
 });
