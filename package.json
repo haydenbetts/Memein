@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server/index.js",
-    "dev:react": "webpack -d --watch"
+    "start-dev": "nodemon server/index.js",
+    "dev:react": "webpack -d --watch",
+    "build": "webpack",
+    "start": "node server/index.js"
   },
   "author": "Hayden Betts",
   "license": "ISC",

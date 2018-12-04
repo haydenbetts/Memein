@@ -6,7 +6,7 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const fetchMeme = require('../helpers/fetchMeme');
 
-server.listen(3000);
+server.listen(5000);
 // WARNING: app.listen(80) will NOT work here!
 
 app.use(morgan('dev'));
