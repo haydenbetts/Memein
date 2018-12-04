@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Axios from 'axios';
+import axios from 'axios';
 import Landing from './components/Landing.jsx';
 import Lobby from './components/Lobby.jsx';
 import Captioning from './components/Captioning.jsx';
+import Splash from './components/Splash.jsx';
 import styles from './styles/app.css';
 import openSocket from 'socket.io-client';
 const socket = openSocket('http://localhost:3000');
@@ -13,11 +14,11 @@ class App extends React.Component {
     super(props);
     this.state = {
       view: 'lobby',
-      players: [],
       playerCount: 0,
       roomCount: 0,
       countdown: null,
-      countdownTwo: null
+      countdownTwo: null,
+      generatedMemeURL: ""
     }
     this.changeView = this.changeView.bind(this);
 
@@ -39,12 +40,16 @@ class App extends React.Component {
     })
 
     socket.on('captioningOver', function () {
-      context.setState({})
+      context.setState({ view: 'splash' })
       // on game over, submit your top line and bottom line to 
       // the api
       // when you have retrieved responses from the api, 
       // send those memes to everyone in the room.
       // and render 
+    })
+
+    socket.on('receivedAllMemes', function (data) {
+      console.log(data)
     })
 
     socket.on('meme', function () {
@@ -54,9 +59,26 @@ class App extends React.Component {
         message: 'startgame'
       })
     })
+
+    this.postMeme = this.postMeme.bind(this);
   }
 
   componentDidMount() {
+  }
+
+  postMeme(topline, bottomline, memeIdForPost) {
+    let URL = `https://api.imgflip.com/caption_image?template_id=${memeIdForPost}&password=${process.env.PASSWORD}&text0=${topline}&text1=${bottomline}&username=${process.env.USERNAME}`
+    let context = this;
+    axios.get(URL)
+      .then((data) => {
+        console.log(data.data.data.url)
+        this.setState({ generatedMemeURL: data.data.url });
+        socket.emit('update', {
+          message: 'memeGenerated',
+          room: context.state.roomCount,
+          url: data.data.data.url
+        })
+      })
   }
 
 
@@ -81,7 +103,10 @@ class App extends React.Component {
       return <Captioning changeView={this.changeView}
         socket={this.state.socket}
         countdownTwo={this.state.countdownTwo}
+        postMeme={this.postMeme}
       />
+    } else if (view === 'splash') {
+      return <Splash changeView={this.state.changeView} />
     } else {
       return <div></div>
     }

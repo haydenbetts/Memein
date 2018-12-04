@@ -34,6 +34,7 @@ io.on('connection', function (socket) {
   socket.on('joinRoom', function (room) {
     roomNumber = room;
     socket.join(room);
+    startedGameForRoom[room] = {};
     socketRoomObject = io.sockets.adapter.rooms[room];
 
     if (socketRoomObject && socketRoomObject.length === 4) {
@@ -56,11 +57,11 @@ io.on('connection', function (socket) {
   })
 
   socket.on('update', function (data) {
-    if (data.message = 'startgame') {
-      if (!startedGameForRoom[data.room]) {
+    if (data.message === 'startgame') {
+      if (!startedGameForRoom[data.room]['timerTwo']) {
         console.log(data)
 
-        startedGameForRoom[data.room] = true;
+        startedGameForRoom[data.room]['timerTwo'] = true;
         io.sockets.in(data.room).emit('countdownTwo', 5);
         let counter = 5;
         let WinnerCountdown = setInterval(function () {
@@ -69,8 +70,22 @@ io.on('connection', function (socket) {
           if (counter === 0) {
             io.sockets.in(data.room).emit('captioningOver');
             clearInterval(WinnerCountdown);
+            delete startedGameForRoom[data.room]['timerTwo'];
           }
         }, 1000);
+      }
+    } else if (data.message === 'memeGenerated') {
+      console.log(data)
+      if (!startedGameForRoom[data.room]['memeURLS']) {
+        startedGameForRoom[data.room]['memeURLS'] = [data.url];
+      } else {
+        startedGameForRoom[data.room]['memeURLS'].push(data.url);
+      }
+
+      if (startedGameForRoom[data.room]['memeURLS'].length === 4) {
+        io.sockets.in(data.room).emit('receivedAllMemes', {
+          urls: startedGameForRoom[data.room]['memeURLS']
+        });
       }
     }
   })
