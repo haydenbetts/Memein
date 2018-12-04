@@ -16,10 +16,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/../react-client/dist'));
 
 let playerCount = 0;
+const startedGameForRoom = {};
 
 io.on('connection', function (socket) {
-  let roomNumber;
+  // todo. Do no hard code this...
+  let roomNumber = 0;
   playerCount++;
+  let socketRoomObject;
 
   io.emit('counts', playerCount);
 
@@ -31,19 +34,19 @@ io.on('connection', function (socket) {
   socket.on('joinRoom', function (room) {
     roomNumber = room;
     socket.join(room);
-    let socketRoomObject = io.sockets.adapter.rooms[room];
+    socketRoomObject = io.sockets.adapter.rooms[room];
 
     if (socketRoomObject && socketRoomObject.length === 4) {
       // if the room is full, start a countdown
       console.log('room full')
       io.sockets.in(room).emit('countdown', 'starting countdown');
 
-      var counter = 5;
-      var WinnerCountdown = setInterval(function () {
-        io.sockets.emit('countdown', counter);
+      let counter = 5;
+      let WinnerCountdown = setInterval(function () {
+        io.sockets.in(room).emit('countdown', counter);
         counter--
         if (counter === 0) {
-          io.sockets.emit('countdown', counter);
+          io.sockets.in(room).emit('countdown', counter);
           // TODO get three random images of the same meme,
           // and set them in the object below to our clients
           io.sockets.in(room).emit('meme', {});
@@ -52,4 +55,25 @@ io.on('connection', function (socket) {
       }, 1000);
     }
   })
+
+  socket.on('update', function (data) {
+    if (data.message = 'startgame') {
+      if (!startedGameForRoom[data.room]) {
+        console.log(data)
+
+        startedGameForRoom[data.room] = true;
+        io.sockets.in(data.room).emit('countdownTwo', 'starting countdown');
+        let counter = 6;
+        let WinnerCountdown = setInterval(function () {
+          counter--
+          io.sockets.in(data.room).emit('countdownTwo', counter);
+          if (counter === 0) {
+            io.sockets.in(data.room).emit('gameOver');
+            clearInterval(WinnerCountdown);
+          }
+        }, 1000);
+      }
+    }
+  })
+
 });

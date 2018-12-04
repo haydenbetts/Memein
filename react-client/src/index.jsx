@@ -12,11 +12,12 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      view: 'game',
+      view: 'landing',
       players: [],
       playerCount: 0,
       roomCount: 0,
-      countdown: null
+      countdown: null,
+      countdownTwo: null
     }
     this.changeView = this.changeView.bind(this);
 
@@ -33,8 +34,20 @@ class App extends React.Component {
       context.setState({ countdown })
     })
 
+    socket.on('countdownTwo', function (countdownTwo) {
+      context.setState({ countdownTwo: countdownTwo })
+    })
+
+    socket.on('gameOver', function () {
+      context.setState({})
+    })
+
     socket.on('meme', function () {
       context.setState({ view: 'game' })
+      socket.emit('update', {
+        room: context.state.roomCount,
+        message: 'startgame'
+      })
     })
   }
 
@@ -60,7 +73,10 @@ class App extends React.Component {
         countdown={this.state.countdown}
       />
     } else if (view === 'game') {
-      return <Game changeView={this.changeView} socket={this.state.socket} />
+      return <Game changeView={this.changeView}
+        socket={this.state.socket}
+        countdownTwo={this.state.countdownTwo}
+      />
     } else {
       return <div></div>
     }

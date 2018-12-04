@@ -56,11 +56,12 @@ class Game extends React.Component {
           })}
         </div>
         <div className={styles.textWrapper}>
-          <h3> Top-line</h3>
+          <h3> My Top-line</h3>
           <input id="topLine" onChange={(e) => this.handleChange(e)}></input>
-          <h3> Bottom-line</h3>
+          <h3> My Bottom-line</h3>
           <input id="bottomLine" onChange={(e) => this.handleChange(e)}></input>
           <button id="submit" onClick={(e) => { this.clickHandler(e) }}>Submit</button>
+          There are {this.props.countdownTwo} seconds left.
         </div>
       </div>
     )
