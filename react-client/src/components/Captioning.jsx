@@ -69,13 +69,13 @@ class Captioning extends React.Component {
         <div className={styles.textWrapper}>
           <h2>Ready... set... caption....!</h2>
           <div className={styles.captionArea}>
-            <textarea className={styles.memeText} id="topLine" onChange={(e) => this.handleChange(e)}></textarea>
+            <textarea className={styles.topText} id="topLine" onChange={(e) => this.handleChange(e)}></textarea>
             <img src={this.state.blankImageUrl} width="300"></img>
-            <textarea className={styles.memeText} id="bottomLine" onChange={(e) => this.handleChange(e)}></textarea>
-            <button id="submit" onClick={(e) => { this.clickHandler(e) }}>Submit</button>
-            There are {this.props.countdownTwo} seconds left.
+            <textarea className={styles.bottomText} id="bottomLine" onChange={(e) => this.handleChange(e)}></textarea>
           </div>
-        </div>
+          <button id="submit" onClick={(e) => { this.clickHandler(e) }}>Submit</button>
+          There are {this.props.countdownTwo} seconds left.
+          </div>
       </div>
     )
   }
