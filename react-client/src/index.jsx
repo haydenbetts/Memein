@@ -15,8 +15,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      view: 'game',
+      view: 'landing',
       playerCount: 0,
+      lobbyCount: 0,
       roomCount: 0,
       countdown: null,
       countdownTwo: null,
@@ -27,10 +28,22 @@ class App extends React.Component {
     this.changeView = this.changeView.bind(this);
 
     let context = this;
-    socket.on('counts', function (playerCount) {
-      context.setState({ playerCount: playerCount }, () => {
+
+    /*
+  socket.on('counts', function (playerCount) {
+    context.setState({ playerCount: playerCount }, () => {
+    })
+    if (playerCount === 4) {
+      //socket.emit('joinRoom', context.state.roomCount);
+    }
+  });
+  */
+
+    socket.on('lobbyCount', function (lobbyCount) {
+      context.setState({ lobbyCount: lobbyCount }, () => {
       })
-      if (playerCount === 4) {
+      console.log(lobbyCount)
+      if (lobbyCount === 4) {
         socket.emit('joinRoom', context.state.roomCount);
       }
     });
@@ -54,7 +67,6 @@ class App extends React.Component {
 
     socket.on('receivedAllMemes', function ({ urls }) {
       context.setState({ generatedMemeURLS: urls }, () => {
-        console.log('STATETTETE', context.state.generatedMemeURLS)
         context.changeView('vote');
       });
     })
@@ -84,7 +96,6 @@ class App extends React.Component {
     let context = this;
     axios.get(URL)
       .then((data) => {
-        console.log(data.data.data.url)
         this.setState({ generatedMemeURL: data.data.url });
         socket.emit('update', {
           message: 'memeGenerated',
@@ -108,9 +119,10 @@ class App extends React.Component {
       return <Landing changeView={this.changeView} />
     } else if (view === 'lobby') {
       return <Lobby changeView={this.changeView}
-        players={this.state.playerCount}
+        lobbyCount={this.state.lobbyCount}
         roomCount={this.state.roomCount}
         countdown={this.state.countdown}
+        socket={socket}
       />
     } else if (view === 'captioning') {
       return <Captioning changeView={this.changeView}

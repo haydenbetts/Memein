@@ -12,11 +12,19 @@ class Lobby extends React.Component {
     // }
   }
 
+  componentDidMount() {
+    this.props.socket.emit('enteredLobby');
+  }
+
+  componentWillUnmount() {
+    this.props.socket.emit('leftLobby');
+  }
+
   render() {
     return (
       <div className={styles.wrapper}>
         <div>Hi this is lobby {this.props.roomCount}.</div>
-        <div>There are currently {this.props.players} players waiting. </div>
+        <div>There are currently {this.props.lobbyCount} players waiting. </div>
         {
           this.props.countdown &&
           <div>

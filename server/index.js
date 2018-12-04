@@ -17,6 +17,9 @@ app.use(express.static(__dirname + '/../react-client/dist'));
 
 let playerCount = 0;
 const startedGameForRoom = {};
+startedGameForRoom[0] = {};
+startedGameForRoom[0]['lobbyCount'] = 0;
+
 
 io.on('connection', function (socket) {
   // todo. Do no hard code this...
@@ -25,16 +28,40 @@ io.on('connection', function (socket) {
   let socketRoomObject;
 
   io.emit('counts', playerCount);
+  io.emit('lobbyCount', startedGameForRoom[roomNumber]['lobbyCount']);
+
 
   socket.on('disconnect', function () {
-    playerCount--;
+    let lobbyCount = startedGameForRoom[roomNumber]['lobbyCount'];
+    if (lobbyCount > 0) {
+      startedGameForRoom[roomNumber]['lobbyCount']--;
+    }
+
+    if (playerCount > 0) {
+      playerCount--;
+    }
+
     io.sockets.emit('counts', playerCount);
+    io.sockets.emit('lobbyCount', startedGameForRoom[roomNumber]['lobbyCount']);
   });
+
+
+  socket.on('enteredLobby', function () {
+    startedGameForRoom[roomNumber]['lobbyCount'] += 1;
+    io.sockets.emit('lobbyCount', startedGameForRoom[roomNumber]['lobbyCount']);
+  })
+
+  socket.on('leftLobby', function () {
+    if (startedGameForRoom[roomNumber]['lobbyCount'] > 0) {
+      startedGameForRoom[roomNumber]['lobbyCount'] -= 1;
+    }
+    io.sockets.emit('lobbyCount', startedGameForRoom[roomNumber]['lobbyCount']);
+  })
 
   socket.on('joinRoom', function (room) {
     roomNumber = room;
     socket.join(room);
-    startedGameForRoom[room] = {};
+    // startedGameForRoom[room] = {};
     socketRoomObject = io.sockets.adapter.rooms[room];
 
     if (socketRoomObject && socketRoomObject.length === 4) {
@@ -57,7 +84,9 @@ io.on('connection', function (socket) {
   })
 
   socket.on('update', function (data) {
-    if (data.message === 'startgame') {
+    if (data.message === 'enteredLobby') {
+
+    } else if (data.message === 'startgame') {
       if (!startedGameForRoom[data.room]['timerTwo']) {
         console.log(data)
 
