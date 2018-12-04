@@ -25,6 +25,7 @@ class Lobby extends React.Component {
       <div className={styles.wrapper}>
         <div>Hi this is lobby {this.props.roomCount}.</div>
         <div>There are currently {this.props.lobbyCount} players waiting. </div>
+        <div>The game will begin when 4 players arrive. </div>
         {
           this.props.countdown &&
           <div>

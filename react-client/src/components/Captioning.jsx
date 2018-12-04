@@ -65,10 +65,11 @@ class Captioning extends React.Component {
           })}
         </div>
         <div className={styles.textWrapper}>
+          <h2>Ready... set... caption....!</h2>
           <h3> My Top-line</h3>
-          <input id="topLine" onChange={(e) => this.handleChange(e)}></input>
+          <input className={styles.memeText} id="topLine" onChange={(e) => this.handleChange(e)}></input>
           <h3> My Bottom-line</h3>
-          <input id="bottomLine" onChange={(e) => this.handleChange(e)}></input>
+          <input className={styles.memeText} id="bottomLine" onChange={(e) => this.handleChange(e)}></input>
           <button id="submit" onClick={(e) => { this.clickHandler(e) }}>Submit</button>
           There are {this.props.countdownTwo} seconds left.
         </div>

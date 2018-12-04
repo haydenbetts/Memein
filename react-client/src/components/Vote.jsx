@@ -29,13 +29,20 @@ class Vote extends React.Component {
 
   render() {
     return (
-      <div className={styles.generatedMemesWrapper}>
-        <div className={styles.imageWrapper}>
-          {this.props.generatedMemeURLS.map((url) => {
-            return <img className={styles.generatedMemes} onClick={(e) => this.handleClick(e)} src={url} height="300"></img>
-          })}
+      <div>
+        <div className={styles.titleWrapper}>
+          <h2>Click on the funniest meme</h2>
+          <h3>The game will continue after everyone votes</h3>
+          <h3>Yes... you can vote for own meme.... but should you.... 🤨</h3>
         </div>
-      </div >
+        <div className={styles.generatedMemesWrapper}>
+          <div className={styles.imageWrapper}>
+            {this.props.generatedMemeURLS.map((url) => {
+              return <img className={styles.generatedMemes} onClick={(e) => this.handleClick(e)} src={url} height="300"></img>
+            })}
+          </div>
+        </div >
+      </div>
     )
   }
 }

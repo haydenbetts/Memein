@@ -40,6 +40,9 @@ io.on('connection', function (socket) {
     if (playerCount > 0) {
       playerCount--;
     }
+    delete startedGameForRoom[roomNumber]['votes'];
+    //startedGameForRoom[roomNumber]['lobbyCount'] = 0;
+    delete startedGameForRoom[roomNumber]['memeURLS'];
 
     io.sockets.emit('counts', playerCount);
     io.sockets.emit('lobbyCount', startedGameForRoom[roomNumber]['lobbyCount']);
@@ -105,8 +108,8 @@ io.on('connection', function (socket) {
         console.log(data)
 
         startedGameForRoom[data.room]['timerTwo'] = true;
-        io.sockets.in(data.room).emit('countdownTwo', 2);
-        let counter = 2;
+        io.sockets.in(data.room).emit('countdownTwo', 10);
+        let counter = 10;
         let WinnerCountdown = setInterval(function () {
           counter--
           io.sockets.in(data.room).emit('countdownTwo', counter);
