@@ -63,7 +63,7 @@ io.on('connection', function (socket) {
 
         startedGameForRoom[data.room]['timerTwo'] = true;
         io.sockets.in(data.room).emit('countdownTwo', 5);
-        let counter = 20;
+        let counter = 5;
         let WinnerCountdown = setInterval(function () {
           counter--
           io.sockets.in(data.room).emit('countdownTwo', counter);

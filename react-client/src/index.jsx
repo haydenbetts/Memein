@@ -14,7 +14,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      view: 'lobby',
+      view: 'game',
       playerCount: 0,
       roomCount: 0,
       countdown: null,
