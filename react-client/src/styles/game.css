@@ -1,4 +1,11 @@
-.wrapper {
+.imageWrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+.textWrapper {
   display: flex;
   justify-content: center;
   flex-direction: column;

@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const app = require('express')();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
+const fetchMeme = require('../helpers/fetchMeme');
 
 server.listen(3000);
 // WARNING: app.listen(80) will NOT work here!
@@ -43,14 +44,12 @@ io.on('connection', function (socket) {
         counter--
         if (counter === 0) {
           io.sockets.emit('countdown', counter);
+          // TODO get three random images of the same meme,
+          // and set them in the object below to our clients
           io.sockets.in(room).emit('meme', {});
           clearInterval(WinnerCountdown);
         }
       }, 1000);
     }
-  })
-
-  socket.on('startedGame', function () {
-    // send something to everyone in room
   })
 });

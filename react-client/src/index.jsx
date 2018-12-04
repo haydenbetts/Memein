@@ -12,7 +12,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      view: 'lobby',
+      view: 'game',
       players: [],
       playerCount: 0,
       roomCount: 0,
@@ -60,7 +60,7 @@ class App extends React.Component {
         countdown={this.state.countdown}
       />
     } else if (view === 'game') {
-      return <Game changeView={this.changeView} />
+      return <Game changeView={this.changeView} socket={this.state.socket} />
     } else {
       return <div></div>
     }
