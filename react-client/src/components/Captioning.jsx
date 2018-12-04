@@ -43,9 +43,35 @@ class Captioning extends React.Component {
   }
 
   fetchMeme() {
-    this.setState({ memeIdForPost: 61532 });
-    const URL = `http://version1.api.memegenerator.net//Instances_Select_ByPopular?languageCode=en&pageIndex=0&urlName=The-Most-Interesting-Man-In-The-World&days=&apiKey=${process.env.API_KEY}`;
-    const BLANK_URL = `https://i.imgflip.com/1bh8.jpg`;
+
+    // this.state.memeIdForPost
+    const MEMES = [
+      {
+        URL: `http://version1.api.memegenerator.net//Instances_Select_ByPopular?languageCode=en&pageIndex=0&urlName=The-Most-Interesting-Man-In-The-World&days=&apiKey=${process.env.API_KEY}`,
+        BLANK_URL: `https://i.imgflip.com/1bh8.jpg`,
+        MEME_ID_FOR_POST: 61532
+      },
+      {
+        URL: `http://version1.api.memegenerator.net//Instances_Select_ByPopular?languageCode=en&pageIndex=0&urlName=Success-Kid&days=&apiKey=${process.env.API_KEY}`,
+        BLANK_URL: `https://i.imgflip.com/1bhk.jpg`,
+        MEME_ID_FOR_POST: 61544
+      },
+      {
+        URL: `http://version1.api.memegenerator.net//Instances_Select_ByPopular?languageCode=en&pageIndex=0&urlName=First-World-Problems&days=&apiKey=${process.env.API_KEY}`,
+        BLANK_URL: `https://i.imgflip.com/1bh8.jpg`,
+        MEME_ID_FOR_POST: 61532
+      },
+      {
+        URL: ``,
+        BLANK_URL: 'https://i.imgflip.com/2kbn1e.jpg',
+        MEME_ID_FOR_POST: 155067746
+      }
+    ]
+
+    this.setState({ memeIdForPost: MEMES[0]['MEME_ID_FOR_POST'] });
+    const URL = MEMES[0]['URL'];
+    const BLANK_URL = MEMES[0]['BLANK_URL'];
+
     this.setState({ blankImageUrl: BLANK_URL })
     let instanceUrls = [];
     let context = this;
@@ -69,7 +95,7 @@ class Captioning extends React.Component {
       <div>
         <div className={styles.textWrapper}>
           <h2>Ready... set... caption....! {this.props.countdownTwo} seconds left.</h2>
-          <h3>(Don't know the format? See example memes to the right and left.)</h3>
+          <h3>(Don't know the format? See example memes to the right and left. They make take a few seconds to appear!)</h3>
           <button id="submit" class={styles.submit} style={inputStyle} onClick={(e) => { this.clickHandler(e) }}>Submit</button>
           <div className={styles.captionArea}>
             <textarea className={styles.topText} id="topLine" onChange={(e) => this.handleChange(e)}></textarea>
